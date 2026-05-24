@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapa de Avistamientos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <!-- LEAFLET -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+
+        body{
+            background-color: #000;
+        }
+
+        #mapa{
+            height: 650px;
+            width: 100%;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(255,193,7,0.4);
+        }
+
+    </style>
+
+</head>
+
+<body class="text-light">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark border-bottom border-warning">
+
+    <div class="container">
+
+        <a href="index.html"
+           class="navbar-brand text-warning fw-bold">
+            ← Volver
+        </a>
+
+        <span class="text-warning fw-bold">
+            MAPA DE ACTIVIDAD CRÍPTIDA
+        </span>
+
+    </div>
+
+</nav>
+
+<!-- CONTENIDO -->
+<div class="container py-5">
+
+    <!-- TITULO -->
+    <div class="text-center mb-4">
+
+        <h1 class="display-4 text-warning fw-bold">
+            Rastreo en Tiempo Real
+        </h1>
+
+        <p class="text-secondary">
+            Últimos avistamientos y movimientos detectados.
+        </p>
+
+    </div>
+
+    <!-- ALERTA -->
+    <div class="alert alert-warning text-center fw-bold">
+
+        ⚠ Señales anómalas detectadas en distintas regiones ⚠
+
+    </div>
+
+    <!-- MAPA -->
+    <div id="mapa"></div>
+
+</div>
+
+<!-- SCRIPT DEL MAPA -->
+<script>
+
+    // CREAR MAPA
+    const mapa = L.map('mapa').setView([23.6345, -102.5528], 5);
+
+    // CAPA DEL MAPA
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '&copy; OpenStreetMap'
+        }
+    ).addTo(mapa);
+
+    // ICONO PERSONALIZADO
+    const iconoCriptido = L.icon({
+
+        iconUrl: 'https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png',
+
+        iconSize: [45, 45],
+
+        iconAnchor: [22, 45],
+
+        popupAnchor: [0, -40]
+
+    });
+
+    // UBICACIONES
+   const criptidos = [
+
+    {
+        nombre: "Chupacabras",
+        ubicacion: [19.4326, -99.1332],
+        descripcion: "Actividad detectada cerca de granjas."
+    },
+
+    {
+        nombre: "Pie Grande",
+        ubicacion: [25.6866, -100.3161],
+        descripcion: "Figura humanoide observada en bosque."
+    },
+
+    {
+        nombre: "Skinwalker",
+        ubicacion: [20.6597, -103.3496],
+        descripcion: "Reportes de sonidos extraños."
+    },
+
+    {
+        nombre: "Mothman",
+        ubicacion: [32.5149, -117.0382],
+        descripcion: "Entidad alada detectada de noche."
+    },
+
+    {
+        nombre: "El Yeti",
+        ubicacion: [27.9878, 86.9250],
+        descripcion: "Criatura avistada cerca de montañas nevadas."
+    },
+
+    {
+        nombre: "Wendigo",
+        ubicacion: [49.2827, -123.1207],
+        descripcion: "Presencia hostil detectada en bosques fríos."
+    },
+
+    {
+        nombre: "La Llorona",
+        ubicacion: [18.4861, -69.9312],
+        descripcion: "Lamentos escuchados cerca de ríos."
+    },
+
+    {
+        nombre: "Kraken",
+        ubicacion: [64.9631, -19.0208],
+        descripcion: "Movimiento gigantesco bajo el océano."
+    },
+
+    {
+        nombre: "Jersey Devil",
+        ubicacion: [39.9526, -75.1652],
+        descripcion: "Criatura alada vista sobre carreteras."
+    },
+
+    {
+        nombre: "Dogman",
+        ubicacion: [43.0731, -89.4012],
+        descripcion: "Ser mitad humano mitad perro detectado."
+    },
+
+    {
+        nombre: "Bunyip",
+        ubicacion: [-33.8688, 151.2093],
+        descripcion: "Entidad acuática observada en pantanos."
+    },
+
+    {
+        nombre: "Ningen",
+        ubicacion: [69.6492, 18.9553],
+        descripcion: "Extraña figura blanca detectada en el mar."
+    },
+
+    {
+        nombre: "Thunderbird",
+        ubicacion: [36.1699, -115.1398],
+        descripcion: "Ave gigantesca vista durante tormentas."
+    },
+
+    {
+        nombre: "Nahual",
+        ubicacion: [17.0732, -96.7266],
+        descripcion: "Transformaciones extrañas reportadas por habitantes."
+    },
+
+    {
+        nombre: "Goatman",
+        ubicacion: [38.9072, -77.0369],
+        descripcion: "Entidad agresiva observada bajo puentes."
+    },
+
+    {
+        nombre: "Fresno Nightcrawler",
+        ubicacion: [36.7378, -119.7871],
+        descripcion: "Figura blanca caminando captada por cámaras."
+    },
+
+    {
+        nombre: "Loveland Frog",
+        ubicacion: [39.2689, -84.2638],
+        descripcion: "Criaturas anfibias detectadas de madrugada."
+    },
+
+    {
+        nombre: "Ahool",
+        ubicacion: [-6.2088, 106.8456],
+        descripcion: "Murciélago gigante visto en selvas."
+    },
+
+    {
+        nombre: "Mokele-Mbembe",
+        ubicacion: [-1.2921, 36.8219],
+        descripcion: "Animal prehistórico detectado en ríos."
+    },
+
+    {
+        nombre: "Tizheruk",
+        ubicacion: [64.2008, -149.4937],
+        descripcion: "Serpiente marina observada cerca del hielo."
+    }
+
+
+    ];
+
+    // AGREGAR MARCADORES
+    criptidos.forEach(criptido => {
+
+        L.marker(criptido.ubicacion, {
+            icon: iconoCriptido
+        })
+
+        .addTo(mapa)
+
+        .bindPopup(`
+            <h5>${criptido.nombre}</h5>
+            <p>${criptido.descripcion}</p>
+            <span style="color:red;">
+                ● Señal activa
+            </span>
+        `);
+
+    });
+
+    // EFECTO DE MOVIMIENTO EN TIEMPO REAL
+    setInterval(() => {
+
+        criptidos.forEach(criptido => {
+
+            criptido.ubicacion[0] += (Math.random() - 0.5) * 0.1;
+            criptido.ubicacion[1] += (Math.random() - 0.5) * 0.1;
+
+        });
+
+    }, 4000);
+
+</script>
+<!-- FOOTER -->
+    <footer class="bg-black border-top border-info text-light py-4 mt-5">
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- INFO -->
+                <div class="col-md-4 mb-4">
+
+                    <h5 class="text-warning fw-bold">
+                        👁️ Archivos de Críptidos
+                    </h5>
+
+                    <p class="text-secondary">
+                        Base de datos dedicada a documentar criaturas,
+                        entidades y fenómenos inexplicables alrededor del mundo.<br><br>Investigadores :<br>Brandon Josue Cova Bautista<br>Luis Antonio Fernandez Hernandez<br>Alan Guillermo Hernandez Alvarez
+                    </p>
+
+                </div>
+
+                <!-- ENLACES -->
+                <div class="col-md-4 mb-4">
+
+                    <h5 class="text-info fw-bold">
+                        Navegación
+                    </h5>
+
+                    <ul class="list-unstyled">
+
+                        <li>
+                            <a href="index.html"
+                            class="text-decoration-none text-light">
+
+                                Inicio
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="Reportes.html"
+                            class="text-decoration-none text-light">
+
+                                Reportes
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="Videos.html"
+                            class="text-decoration-none text-light">
+
+                                Videos
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="missing.html"
+                            class="text-decoration-none text-light">
+
+                                Archivos Perdidos
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- MENSAJE -->
+                <div class="col-md-4 mb-4">
+
+                    <h5 class="text-danger fw-bold">
+                        Clasificado
+                    </h5>
+
+                    <p class="text-secondary">
+                        Algunos expedientes contienen información sensible.
+                        El acceso está restringido a investigadores autorizados.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- LINEA FINAL -->
+            <hr class="border-secondary">
+
+            <div class="text-center text-secondary">
+
+                © 2026 Archivos Secretos v4 | Todos los expedientes reservados
+
+            </div>
+
+        </div>
+
+    </footer>
+</body>
+</html>
